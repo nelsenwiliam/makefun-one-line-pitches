@@ -21,6 +21,12 @@ def main() -> None:
     assert text, "pitch must not be empty"
     assert "\n" not in text, "pitch must be a single line"
     assert len(text) <= 240, f"pitch is {len(text)} chars, over the 240 limit"
+    # One sentence only: ends with a full stop and holds no ". " (a period
+    # followed by a space would end a sentence early; the dot in make.fun
+    # is inside a word, so it does not count).
+    assert text.endswith("."), "pitch must end with a full stop"
+    assert ". " not in text, "pitch must be exactly one sentence"
+    assert "!" not in text and "?" not in text, "pitch must be one statement"
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(text)
